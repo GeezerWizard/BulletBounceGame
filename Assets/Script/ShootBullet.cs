@@ -15,6 +15,17 @@ public class ShootBullet : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Vector3 newRotation = turret.rotation.eulerAngles;
+            
+            if (newRotation.z > 360) 
+            {
+                newRotation -= new Vector3(0, 0, 360);
+            }
+            else if (newRotation.z < 0) 
+            {
+                newRotation += new Vector3(0, 0, 360); 
+            }
+            print(newRotation);
+
             Instantiate(bullet, turret.position, Quaternion.Euler(newRotation));
         }
     }

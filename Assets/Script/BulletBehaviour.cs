@@ -7,7 +7,7 @@ public class BulletBehaviour : MonoBehaviour
     BounceBullet bounceBullet;
     private Vector3 bounceAngle = new Vector3(0, 0, 90);
 
-    [SerializeField] private float speed = 1f;
+    float bulletSpeed = 3f;
 
     private float boundsX;
     private float boundsY;
@@ -19,28 +19,44 @@ public class BulletBehaviour : MonoBehaviour
     }
     void Update()
     {
-        this.transform.position += this.transform.up * speed * Time.deltaTime;
+        // Forward movement
+        this.transform.position += this.transform.up * bulletSpeed * Time.deltaTime;
 
+        // Recording position
         float posX = transform.position.x;
         float posY = transform.position.y;
 
-        if (posX >= boundsX || posX < -boundsX)
+        float zAngle = transform.eulerAngles.z;
+
+        if (zAngle > 180) 
         {
-            transform.rotation = Quaternion.Euler(0, 0, transform.eulerAngles.z * -1);
-            CheckTag();
-            Vector3 adjustPos = new Vector3();
-            if (posX > 0) {adjustPos = new Vector3(boundsX, transform.position.y, 0);}
-            if (posX < 0) {adjustPos = new Vector3(-boundsX, transform.position.y, 0);}
-            transform.position = adjustPos;
+            transform.eulerAngles -= new Vector3(0, 0, 360);
         }
-        else if (posY >= boundsY || posY < -boundsY)
+        else if (zAngle < -180) 
         {
-            transform.rotation = Quaternion.Euler(0, 0, transform.eulerAngles.z * -1 + 180);
-            CheckTag();
-            Vector3 adjustPos = new Vector3();
-            if (posY > 0) {adjustPos = new Vector3(transform.position.x, boundsY, 0);}
-            if (posY < 0) {adjustPos = new Vector3(transform.position.x, -boundsY, 0);}
-            transform.position = adjustPos;
+            transform.eulerAngles += new Vector3(0, 0, 360); 
+        }
+
+
+        if (posX > boundsX)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, AdjustedAngle(zAngle, -90));
+            FixPositions(posX, boundsX, transform.position.y);
+        }
+        else if (posX < -boundsX)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, AdjustedAngle(zAngle, 90));
+            FixPositions(posX, -boundsX, transform.position.y);
+        }
+        else if (posY > boundsY)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, AdjustedAngle(zAngle, 0));
+            FixPositions(posY, transform.position.x, boundsY);
+        }
+        else if (posY < -boundsY)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, AdjustedAngle(zAngle, 180));
+            FixPositions(posY, transform.position.x, -boundsY);
         }
     }
 
@@ -50,5 +66,28 @@ public class BulletBehaviour : MonoBehaviour
         {
             gameObject.tag = "Bullet";
         }
+    }
+
+    float AdjustedAngle(float currentAngle, float testAngle)
+    {
+        if (currentAngle >= testAngle)
+        {
+            currentAngle += 90;
+            print(currentAngle);
+        }
+        else
+        {
+            currentAngle -= 90;
+            print(currentAngle);
+        }
+        return currentAngle;
+    }
+
+    void FixPositions(float pos, float adjustX, float adjustY)
+    {
+        Vector3 adjustPos = new Vector3();
+        if (pos > 0) { adjustPos = new Vector3(adjustX, adjustY, 0); }
+        if (pos < 0) { adjustPos = new Vector3(adjustX, adjustY, 0); }
+        transform.position = adjustPos;
     }
 }
