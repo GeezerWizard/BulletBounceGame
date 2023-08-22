@@ -18,13 +18,12 @@ public class ShootBullet : MonoBehaviour
             
             if (newRotation.z > 360) 
             {
-                newRotation -= new Vector3(0, 0, 360);
+                newRotation -= new Vector3(0, 180, 360);
             }
             else if (newRotation.z < 0) 
             {
-                newRotation += new Vector3(0, 0, 360); 
+                newRotation += new Vector3(0, 180, 360); 
             }
-            print(newRotation);
 
             Instantiate(bullet, turret.position, Quaternion.Euler(newRotation));
         }
