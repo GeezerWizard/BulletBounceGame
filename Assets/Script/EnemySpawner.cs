@@ -13,35 +13,61 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] private GameObject enemyPrefab;
     private float enemySpeed;
-    private float spawnRate = 1;
+    private float spawnRate;
 
     private float timer;
     private float spawnTimer;
-    private float spawnTime = 1f;
+    private float spawnTime;
+    private bool spawnEnemy = false;
+    private List<GameObject> enemies = new List<GameObject>();
 
-    [SerializeField] private TextMeshProUGUI scoreText;
-
-    private void Start() {
+    private void Start() 
+    {
+        GameEvents.current.onPlayerDeath += StopSpawning;
+        GameEvents.current.GameStart();
         bounceBullet = FindObjectOfType<BounceBullet>();
         spawnBounds = new Vector2(bounceBullet.arenaX + spawnBorderPad, bounceBullet.arenaY + spawnBorderPad);
         boundsX = spawnBounds.x/2;
         boundsY = spawnBounds.y/2;
+
+        StartSpawning();
     }
 
-    private void Update() {
+    void StartSpawning()
+    {
+        if (enemies.Count > 0)
+        {
+            RestartSpawning();
+        }
+        spawnTime = 1f;
+        spawnRate = 1;
+        spawnEnemy = true;
+    }
 
+    void StopSpawning()
+    {
+        spawnEnemy = false;
+    }
+    
+    void RestartSpawning()
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            Destroy(enemy);
+        }
+        enemies = new List<GameObject>();
+    }
 
+    private void Update() 
+    {
         timer += Time.deltaTime;
         spawnTimer += Time.deltaTime;
 
-        //if not game over
-        scoreText.text = timer.ToString();
-
-        if (spawnTimer > spawnTime)
+        if (spawnTimer > spawnTime && spawnEnemy == true)
         {
             for (int i = 0; i < spawnRate; i++)
             {
-                Instantiate(enemyPrefab, SetPosition(), Quaternion.identity);
+                enemies.Add(Instantiate(enemyPrefab, SetPosition(), Quaternion.identity));
             }
             spawnRate++;
             spawnTime++;

@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool invincible;
     private bool initialPlayerTouched = false;
     [SerializeField] private BounceBullet bb;
+    [SerializeField] private ScoreManager scoreManager;
     private float xBounds;
     private float yBounds;
 
@@ -32,36 +33,28 @@ public class PlayerMovement : MonoBehaviour
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
         rb.rotation = angle - 90;
 
-        print(this.transform.position.x + " and " + xBounds);
         if (Input.anyKey)
         {
             movementDir = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
             if (this.transform.position.x >= xBounds && movementDir.x > 0)
             {
                 movementDir.x = 0;
-                print("out of bounds X");
             }
             else if (this.transform.position.x <= -xBounds && movementDir.x < 0)
             {
                 movementDir.x = 0;
-                print("out of bounds -X");
             }
             if (this.transform.position.y >= yBounds && movementDir.y > 0)
             {
                 movementDir.y = 0;
-                print("out of bounds Y");
             }
             else if (this.transform.position.y <= -yBounds && movementDir.y < 0)
             {
                 movementDir.y = 0;
-                print("out of bounds -Y");
             }
 
             this.transform.position += movementDir * speed * Time.deltaTime;
-        }
-
-
-        
+        }        
 
         //Movement
         //this.transform.position += Vector3.up * Input.GetAxisRaw("Vertical") * speed * Time.deltaTime;
@@ -73,6 +66,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (other.tag == "Bullet" || other.tag == "Enemy")
             {
+                scoreManager.SetEndGameText(other.tag);
+                GameEvents.current.PlayerDeath();
                 gameOverMenu.SetActive(true);
                 gameObject.SetActive(false);
             }

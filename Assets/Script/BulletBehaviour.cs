@@ -5,8 +5,6 @@ using UnityEngine;
 public class BulletBehaviour : MonoBehaviour
 {
     BounceBullet bounceBullet;
-    int debugBounceMax = 10;
-    int debugBounceAmount = 0;
     private Vector3 bounceAngle = new Vector3(0, 0, 90);
 
     float bulletSpeed = 10f;
@@ -24,7 +22,6 @@ public class BulletBehaviour : MonoBehaviour
         boundsY = bounceBullet.arenaY/2;
 
         zAngle = transform.eulerAngles.z;
-        print(zAngle);
         gameObject.tag = "Untagged";
     }
 
