@@ -24,7 +24,8 @@ public class EnemySpawner : MonoBehaviour
     private void Start() 
     {
         GameEvents.current.onPlayerDeath += StopSpawning;
-        GameEvents.current.GameStart();
+        //GameEvents.current.GameStart();
+        GameEvents.current.onGameStart += RestartSpawning;
         bounceBullet = FindObjectOfType<BounceBullet>();
         spawnBounds = new Vector2(bounceBullet.arenaX + spawnBorderPad, bounceBullet.arenaY + spawnBorderPad);
         boundsX = spawnBounds.x/2;
@@ -35,10 +36,6 @@ public class EnemySpawner : MonoBehaviour
 
     void StartSpawning()
     {
-        if (enemies.Count > 0)
-        {
-            RestartSpawning();
-        }
         spawnTime = 1f;
         spawnRate = 1;
         spawnEnemy = true;
@@ -56,6 +53,7 @@ public class EnemySpawner : MonoBehaviour
             Destroy(enemy);
         }
         enemies = new List<GameObject>();
+        StartSpawning();
     }
 
     private void Update() 
@@ -67,7 +65,8 @@ public class EnemySpawner : MonoBehaviour
         {
             for (int i = 0; i < spawnRate; i++)
             {
-                enemies.Add(Instantiate(enemyPrefab, SetPosition(), Quaternion.identity));
+                GameObject newEnemy = (GameObject)Instantiate(enemyPrefab, SetPosition(), Quaternion.identity);
+                enemies.Add(newEnemy);
             }
             spawnRate++;
             spawnTime++;

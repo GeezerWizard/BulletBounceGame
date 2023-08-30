@@ -17,9 +17,14 @@ public class ScoreManager : MonoBehaviour
         GameEvents.current.onGameStart += StartCount;
     }
 
+    private void OnDestroy()
+    {
+        GameEvents.current.onPlayerDeath -= StopCount;
+        GameEvents.current.onGameStart -= StartCount;
+    }
+
     private void StopCount()
     {
-        Debug.Log("STOP THE NUMBERS");
         paused = true;
         endGamePanel.SetActive(true);
         StopCoroutine(CountTime());
@@ -27,7 +32,6 @@ public class ScoreManager : MonoBehaviour
 
     private void StartCount()
     {
-        Debug.Log("START THE NUMBERS");
         paused = false;
         endGamePanel.SetActive(false);
         ResetTimer();
