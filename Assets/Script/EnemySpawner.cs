@@ -13,19 +13,19 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] private GameObject enemyPrefab;
     private float enemySpeed;
-    private float spawnRate;
+    private float spawnAmount;
 
-    private float timer;
+    private float scoreTimer;
     private float spawnTimer;
-    private float spawnTime;
+    private float spawnTime = 2;
     private bool spawnEnemy = false;
     private List<GameObject> enemies = new List<GameObject>();
 
     private void Start() 
     {
         GameEvents.current.onPlayerDeath += StopSpawning;
-        //GameEvents.current.GameStart();
         GameEvents.current.onGameStart += RestartSpawning;
+
         bounceBullet = FindObjectOfType<BounceBullet>();
         spawnBounds = new Vector2(bounceBullet.arenaX + spawnBorderPad, bounceBullet.arenaY + spawnBorderPad);
         boundsX = spawnBounds.x/2;
@@ -36,14 +36,15 @@ public class EnemySpawner : MonoBehaviour
 
     void StartSpawning()
     {
-        spawnTime = 1f;
-        spawnRate = 1;
         spawnEnemy = true;
     }
 
     void StopSpawning()
     {
         spawnEnemy = false;
+        spawnAmount = 1;
+        spawnTime = 3;
+        spawnTimer = 0;
     }
     
     void RestartSpawning()
@@ -58,18 +59,20 @@ public class EnemySpawner : MonoBehaviour
 
     private void Update() 
     {
-        timer += Time.deltaTime;
+        scoreTimer += Time.deltaTime;
         spawnTimer += Time.deltaTime;
 
         if (spawnTimer > spawnTime && spawnEnemy == true)
         {
-            for (int i = 0; i < spawnRate; i++)
+            for (int i = 0; i < spawnAmount; i++)
             {
-                GameObject newEnemy = (GameObject)Instantiate(enemyPrefab, SetPosition(), Quaternion.identity);
+                GameObject newEnemy = (GameObject)Instantiate(enemyPrefab, SetSpawnPosition(), Quaternion.identity);
                 enemies.Add(newEnemy);
             }
-            spawnRate++;
+            spawnAmount++;
             spawnTime++;
+            print(spawnTime);
+            spawnTimer = 0;
         }
     }
 
@@ -79,7 +82,7 @@ public class EnemySpawner : MonoBehaviour
     bool swap = false;
     int swapCountdown = 3;
     int swapCount = 0;
-    Vector2 SetPosition()
+    Vector2 SetSpawnPosition()
     {
         Vector2 pos = Vector2.zero;
         if(swapCount != swapCountdown)

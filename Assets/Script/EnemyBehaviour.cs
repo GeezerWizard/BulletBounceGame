@@ -27,7 +27,8 @@ public class EnemyBehaviour : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Untagged" || other.tag == "Bullet")
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
+            //gameObject.SetActive(false);
         }
     }
 }

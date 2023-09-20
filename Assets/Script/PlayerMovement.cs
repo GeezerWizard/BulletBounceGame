@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
     
     void Start() 
     {
+        GameEvents.current.onGameStart += NewGame;
+
         xBounds = bb.arenaX/2;
         yBounds = bb.arenaY/2;
     }
@@ -72,5 +74,11 @@ public class PlayerMovement : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
+    }
+
+    private void NewGame()
+    {
+        gameObject.transform.position = Vector3.zero;
+        gameObject.SetActive(true);
     }
 }
