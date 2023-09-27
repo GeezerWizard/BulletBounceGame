@@ -6,7 +6,7 @@ public class EnemyBehaviour : MonoBehaviour
 {
     private GameObject player;
     [SerializeField] private Rigidbody2D rb;
-    private float speed = 1f;
+    private float speed = 3f;
 
     public float SetSpeed{ set {speed = value;} }
 

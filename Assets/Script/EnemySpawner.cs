@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.AI;
 
 public class EnemySpawner : MonoBehaviour
 {
     private BounceBullet bounceBullet;
+    [SerializeField] private ShootBullet shootBullet;
+    [SerializeField] private int[] waveToAddBullet; 
     private Vector2 spawnBounds;
     float boundsX;
     float boundsY;
@@ -17,8 +20,10 @@ public class EnemySpawner : MonoBehaviour
 
     private float scoreTimer;
     private float spawnTimer;
-    private float spawnTime = 2;
+    [SerializeField] private float initialSpawnTime = 2;
+    private float spawnTime;
     private bool spawnEnemy = false;
+    private int waveNumber = 0;
     private List<GameObject> enemies = new List<GameObject>();
 
     private void Start() 
@@ -36,6 +41,7 @@ public class EnemySpawner : MonoBehaviour
 
     void StartSpawning()
     {
+        spawnTime = initialSpawnTime; 
         spawnEnemy = true;
     }
 
@@ -43,8 +49,9 @@ public class EnemySpawner : MonoBehaviour
     {
         spawnEnemy = false;
         spawnAmount = 1;
-        spawnTime = 3;
+        spawnTime = initialSpawnTime;
         spawnTimer = 0;
+        waveNumber = 0;
     }
     
     void RestartSpawning()
@@ -69,10 +76,18 @@ public class EnemySpawner : MonoBehaviour
                 GameObject newEnemy = (GameObject)Instantiate(enemyPrefab, SetSpawnPosition(), Quaternion.identity);
                 enemies.Add(newEnemy);
             }
+            foreach (int wave in waveToAddBullet)
+            {
+                if (wave == waveNumber)
+                {
+                    shootBullet.BulletAmount += 1;
+                }
+            }
+
             spawnAmount++;
             spawnTime++;
-            print(spawnTime);
             spawnTimer = 0;
+            waveNumber++;
         }
     }
 
