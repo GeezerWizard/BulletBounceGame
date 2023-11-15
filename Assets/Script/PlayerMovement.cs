@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         //Looking at mouse
-        float distance = rb.transform.position.z - Camera.main.transform.position.z; 
+        float distance = rb.transform.position.y - Camera.main.transform.position.y; 
         mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance));        
         Vector2 lookDir = mousePos - this.transform.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
@@ -46,11 +46,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 movementDir.x = 0;
             }
-            if (this.transform.position.y >= yBounds && movementDir.y > 0)
+            if (this.transform.position.z >= yBounds && movementDir.y > 0)
             {
                 movementDir.y = 0;
             }
-            else if (this.transform.position.y <= -yBounds && movementDir.y < 0)
+            else if (this.transform.position.z <= -yBounds && movementDir.y < 0)
             {
                 movementDir.y = 0;
             }

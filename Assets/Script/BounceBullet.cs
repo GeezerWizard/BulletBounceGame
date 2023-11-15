@@ -26,14 +26,14 @@ public class BounceBullet : MonoBehaviour
             wall.localScale = Vector3.one;
         }
 
-        floor.localScale = new Vector3(arenaX - padding, arenaY - padding, 1);
+        floor.localScale = new Vector3(arenaX - padding, 1, arenaY - padding);
 
 
         //Top Boundry
-        boundryWalls[0].position += new Vector3(0, halfArenaY + padding, 0);
+        boundryWalls[0].position += new Vector3(0, 0, halfArenaY + padding);
         boundryWalls[0].localScale = new Vector3(arenaSize.x + 3, 1, 1);
         //Bottom Boundry
-        boundryWalls[1].position -= new Vector3(0, halfArenaY + padding, 0);
+        boundryWalls[1].position -= new Vector3(0, 0, halfArenaY + padding);
         boundryWalls[1].localScale = new Vector3(arenaSize.x + 3, 1, 1);
         //Right Boundry
         boundryWalls[2].position += new Vector3(halfArenaX + padding, 0, 0);
@@ -44,7 +44,7 @@ public class BounceBullet : MonoBehaviour
     }
 
     private void Update() {
-        Vector2[] path = new Vector2[] { new Vector2(halfArenaX, halfArenaY), new Vector2(-halfArenaX, halfArenaY), new Vector2(-halfArenaX, -halfArenaY), new Vector2(halfArenaX, -halfArenaY) };
+        Vector3[] path = new Vector3[] { new Vector3(halfArenaX, 0, halfArenaY), new Vector3(-halfArenaX, 0, halfArenaY), new Vector3(-halfArenaX, 0, -halfArenaY), new Vector3(halfArenaX, 0, -halfArenaY) };
         for (int i = 0; i < path.Length; i++)
         {
             int nextPath = i++;

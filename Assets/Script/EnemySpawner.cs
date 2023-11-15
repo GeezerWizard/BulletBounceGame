@@ -97,9 +97,9 @@ public class EnemySpawner : MonoBehaviour
     bool swap = false;
     int swapCountdown = 3;
     int swapCount = 0;
-    Vector2 SetSpawnPosition()
+    Vector3 SetSpawnPosition()
     {
-        Vector2 pos = Vector2.zero;
+        Vector3 pos = Vector2.zero;
         if(swapCount != swapCountdown)
         {
             swapCount++;
@@ -117,16 +117,16 @@ public class EnemySpawner : MonoBehaviour
             pos.x = Random.Range(-boundsX, boundsX);
             if (invertPosNeg)
             {
-                pos.y = -boundsY;
+                pos.z = -boundsY;
             }
             if (!invertPosNeg)
             {
-                pos.y = boundsY;
+                pos.z = boundsY;
             }
         }
         else if (!toggleXY)
         {
-            pos.y = Random.Range(-boundsY, boundsY);
+            pos.z = Random.Range(-boundsY, boundsY);
             if (invertPosNeg)
             {
                 pos.x = -boundsX;
